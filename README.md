@@ -267,13 +267,14 @@ or `py`.
 - `FZF_DEFAULT_COMMAND`
     - Default command to use when input is tty
     - e.g. `export FZF_DEFAULT_COMMAND='fd --type f'`
-    - > :warning: This variable is not used by shell extensions due to the
-      > slight difference in requirements.
-      >
-      > (e.g. `CTRL-T` runs `$FZF_CTRL_T_COMMAND` instead, `vim **<tab>` runs
-      > `_fzf_compgen_path()`, and `cd **<tab>` runs `_fzf_compgen_dir()`)
-      >
-      > The available options are described later in this document.
+- `FZF_ALT_C_COMMAND`
+    - Command used for finding directories, invoked with `ALT-C` keypress or
+      shell completion like `cd **<TAB>`.
+    - e.g. `export FZF_ALT_C_COMMAND='fd --absolute-path --type d`
+- `FZF_CTRL_T_COMMAND`
+    - Command used for finding directories and files, invoked with `CTRL-T`
+      keypress or shell completion like `vim **<TAB>`.
+    - e.g. `export FZF_CTRL_T_COMMAND='fd --absolute-path --type f`
 - `FZF_DEFAULT_OPTS`
     - Default options
     - e.g. `export FZF_DEFAULT_OPTS="--layout=reverse --inline-info"`
@@ -418,16 +419,10 @@ export FZF_COMPLETION_OPTS='--border --info=inline'
 
 # Use fd (https://github.com/sharkdp/fd) instead of the default find
 # command for listing path candidates.
-# - The first argument to the function ($1) is the base path to start traversal
-# - See the source code (completion.{bash,zsh}) for the details.
-_fzf_compgen_path() {
-  fd --hidden --follow --exclude ".git" . "$1"
-}
+export FZF_CTRL_T_COMMAND='fd --hidden --follow --exclude ".git"'
 
 # Use fd to generate the list for directory completion
-_fzf_compgen_dir() {
-  fd --type d --hidden --follow --exclude ".git" . "$1"
-}
+export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude ".git"'
 
 # (EXPERIMENTAL) Advanced customization of fzf options via _fzf_comprun function
 # - The first argument to the function is the name of the command.
